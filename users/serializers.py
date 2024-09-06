@@ -19,8 +19,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
-        
-
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

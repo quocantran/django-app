@@ -1,24 +1,12 @@
 from rest_framework import serializers
 from .models import Job
-from companies.serializers import CompanyCreateSerializer
+from companies.serializers import CompanyJobsSerializer
 
 class JobCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = [
-            'id',
-            'name', 
-            'description', 
-            'skills', 
-            'company', 
-            'salary', 
-            'level', 
-            'start_date', 
-            'quantity', 
-            'location', 
-            'end_date'
-        ]
+        fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     def create(self, validated_data):
@@ -38,42 +26,18 @@ class JobCreateSerializer(serializers.ModelSerializer):
 
 class JobListSerializer(serializers.ModelSerializer):
 
-    company = CompanyCreateSerializer()
+    company = CompanyJobsSerializer()
 
     class Meta:
         model = Job
-        fields = [
-            'id',
-            'name', 
-            'description', 
-            'skills', 
-            'company', 
-            'salary', 
-            'level', 
-            'start_date', 
-            'quantity', 
-            'location', 
-            'end_date'
-        ]
+        fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 
 class JobUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = [
-            'id'
-            'name', 
-            'description', 
-            'skills', 
-            'company', 
-            'salary', 
-            'level', 
-            'start_date', 
-            'quantity', 
-            'location', 
-            'end_date'
-        ]
+        fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     def update(self, instance, validated_data):

@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'uploads',
     'companies',
-    'jobs'
+    'jobs',
+    'resumes'
 ]
 cloudinary.config(
     cloud_name=config('CLOUD_NAME'),
