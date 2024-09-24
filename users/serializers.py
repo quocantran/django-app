@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import User
 
+class UserChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'name']  # Thêm các trường khác nếu cần
+
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

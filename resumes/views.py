@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from .serializers import CreateResumeSerializer, UpdateResumeStatusSerializer, ResumeSerializer
 from .models import Resume
-from users.pagination import CustomPagination
+from test1.pagination import CustomPagination
 
 class ResumeView(APIView):
     def get_permissions(self):

@@ -1,13 +1,20 @@
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from rest_framework import generics
 from .serializers import CompanyCreateSerializer, CompanyUpdateSerializer, FollowCompanySerializer
 from .models import Company
-from users.pagination import CustomPagination
+from test1.pagination import CustomPagination
+from .filters import CompanyFilter
 
 class CompanyView(APIView):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = CompanyFilter
+    ordering_fields = ['name', 'created_at']
+    pagination_class = CustomPagination
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
@@ -15,11 +22,18 @@ class CompanyView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Company.objects.all()
-        paginator = CustomPagination()
+        
+        # Apply filters
+        filter_backend = DjangoFilterBackend()
+        queryset = filter_backend.filter_queryset(request, queryset, self)
+
+        # Apply pagination
+        paginator = self.pagination_class()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
             serializer = CompanyCreateSerializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
+        
         serializer = CompanyCreateSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

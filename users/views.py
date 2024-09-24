@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from .serializers import UserCreateSerializer, UserUpdateSerializer
 from .models import User
-from .pagination import CustomPagination
+from test1.pagination import CustomPagination
+from otps.views import verify_otp
 
 class UserView(APIView):
     def get_permissions(self):
@@ -42,3 +43,12 @@ class UserView(APIView):
         user = get_object_or_404(User, pk=kwargs.get('pk'))
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ForgotPasswordView(APIView):
+    def get(self, request, *args, **kwargs):
+        token = request.query_params.get('token')
+        isValid = verify_otp(token)
+
+        if not isValid:
+            return Response('Invalid OTP', status=status.HTTP_400_BAD_REQUEST)
+        return Response('Mật khẩu mới đã được gửi về email của bạn!', status=status.HTTP_200_OK)

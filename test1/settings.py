@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
     'auths',
     'users',
     'rest_framework',
@@ -32,13 +31,22 @@ INSTALLED_APPS = [
     'uploads',
     'companies',
     'jobs',
-    'resumes'
+    'resumes',
+    'chats',
+    'django_filters'
 ]
 cloudinary.config(
     cloud_name=config('CLOUD_NAME'),
     api_key=config('API_KEY'),
     api_secret=config('API_SECRET')
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -61,7 +69,7 @@ TEMPLATE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(TEMPLATE_DIR, 'template')],
+        'DIRS': [os.path.join(TEMPLATE_DIR, 'mails/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +89,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'users.pagination.CustomPagination',
+    'DEFAULT_PAGINATION_CLASS': 'test1.pagination.CustomPagination',
     'PAGE_SIZE': 10,
 }
 

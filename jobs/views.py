@@ -1,13 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.shortcuts import get_object_or_404
-from .serializers import JobCreateSerializer, JobUpdateSerializer, JobListSerializer
 from .models import Job
-from users.pagination import CustomPagination
+from .serializers import JobListSerializer, JobCreateSerializer, JobUpdateSerializer
+from .filters import JobFilter
+from django.shortcuts import get_object_or_404
+from test1.pagination import CustomPagination
 
 class JobView(APIView):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = JobFilter
+    ordering_fields = ['name', 'created_at', 'location']
+    pagination_class = CustomPagination
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
@@ -15,6 +21,8 @@ class JobView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Job.objects.all()
+        filter_backend = DjangoFilterBackend()
+        queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
