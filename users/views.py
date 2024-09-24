@@ -9,10 +9,10 @@ from test1.pagination import CustomPagination
 from otps.views import verify_otp
 
 class UserView(APIView):
-    def get_permissions(self):
-        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
-            return [IsAuthenticated()]
-        return [AllowAny()]
+    # def get_permissions(self):
+    #     if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+    #         return [IsAuthenticated()]
+    #     return [AllowAny()]
 
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()

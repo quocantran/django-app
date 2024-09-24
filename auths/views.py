@@ -8,6 +8,8 @@ from rest_framework.decorators import api_view , permission_classes
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.serializers import UserCreateSerializer
+from roles.models import Role
+
 
 
 
@@ -22,12 +24,30 @@ class CustomTokenObtainPairView(APIView):
             refresh_token = tokens['refresh']
 
             # Lấy thông tin người dùng
-            user = User.objects.get(email=request.data['email'])
+            user = User.objects.select_related('role').get(email=request.data['email'])
+
+            role = Role.objects.prefetch_related('permissions').get(id=user.role.id)
+            
+            permissions_data = [
+                {
+                    'id': permission.id,
+                    'name': permission.name,
+                    'apiPath': permission.api_path,
+                    'method': permission.method,
+                    'module': permission.module
+                }
+                for permission in role.permissions.all()
+            ]
+
             user_data = {
                 'id': user.id,
                 'email': user.email,
                 'name': user.name,
-                # Thêm các trường khác nếu cần
+                'role' : {
+                    'id' : user.role.id,
+                    'name' : user.role.name
+                },
+                'permissions' : permissions_data
             }
 
             User.objects.filter(email=request.data['email']).update(refresh_token=refresh_token)
@@ -89,12 +109,30 @@ def RefreshTokenView(request):
         new_refresh_token = str(RefreshToken())
 
         # Lấy thông tin người dùng từ refresh token hiện tại
-        user = User.objects.get(refresh_token=refresh_token)
+        user = User.objects.select_related('role').get(refresh_token=refresh_token)
+
+        role = Role.objects.prefetch_related('permissions').get(id=user.role.id)
+        
+        permissions_data = [
+            {
+                'id': permission.id,
+                'name': permission.name,
+                'apiPath': permission.api_path,
+                'method': permission.method,
+                'module': permission.module
+            }
+            for permission in role.permissions.all()
+        ]
 
         user_data = {
             'id': user.id,
             'email': user.email,
             'name': user.name,
+            'role' : {
+                'id' : user.role.id,
+                'name' : user.role.name
+            },
+            'permissions' : permissions_data
         }
         
         User.objects.filter(refresh_token=refresh_token).update(refresh_token=new_refresh_token)
@@ -128,12 +166,30 @@ def GetAccountView(request):
             raise ValueError("No refresh token found in cookies")
 
         # Lấy thông tin người dùng từ refresh token hiện tại
-        user = User.objects.get(refresh_token=refresh_token)
+        user = User.objects.select_related('role').get(refresh_token=refresh_token)
+
+        role = Role.objects.prefetch_related('permissions').get(id=user.role.id)
+        
+        permissions_data = [
+            {
+                'id': permission.id,
+                'name': permission.name,
+                'apiPath': permission.api_path,
+                'method': permission.method,
+                'module': permission.module
+            }
+            for permission in role.permissions.all()
+        ]
 
         user_data = {
             'id': user.id,
             'email': user.email,
             'name': user.name,
+            'role' : {
+                'id' : user.role.id,
+                'name' : user.role.name
+            },
+            'permissions' : permissions_data
         }
 
         return Response({'user' : user_data}, status=status.HTTP_200_OK)

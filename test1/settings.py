@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'jobs',
     'resumes',
     'chats',
+    'permissions',
+    'roles',
     'django_filters'
 ]
 cloudinary.config(

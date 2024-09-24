@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import Company
 
+class UserCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['id', 'name']
+
 class CompanyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company

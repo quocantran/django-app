@@ -2,7 +2,7 @@
 
 from django.db import models
 from django.utils import timezone
-from .models import Permission  # Import model Permission
+from permissions.models import Permission  # Import model Permission
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
