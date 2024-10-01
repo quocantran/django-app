@@ -1,0 +1,59 @@
+@import "~normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body ::-webkit-scrollbar {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+}
+
+body ::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.25);
+  transition: color 0.2s ease 0s;
+}
+
+body ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0px;
+}
+
+a[href] {
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  outline: none;
+}
+
+.react-input-emoji--input {
+  width: 365px !important;
+}
+
+.react-emoji {
+  width: 92% !important;
+}
+
+@media screen and (max-width: 768px) {
+  .react-input-emoji--input {
+    width: 270px !important;
+  }
+
+}

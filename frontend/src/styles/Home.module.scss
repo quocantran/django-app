@@ -1,0 +1,260 @@
+.section-search {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: rgb(255, 242, 64);
+  padding: 50px 20px;
+}
+
+.search-title {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 30px;
+  letter-spacing: normal;
+  color: rgb(0, 0, 0);
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.search-container {
+  display: flex;
+  width: 100%;
+}
+
+.search-job {
+  flex: 2 1 0%;
+  padding: 0 20px;
+  position: relative;
+  &:focus-within {
+    .search-icon {
+      color: rgb(1, 126, 183);
+    }
+  }
+  input {
+    padding: 10px;
+  }
+}
+
+.job-input {
+  height: 40px;
+  border-radius: 8px;
+  border: unset;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  background-image: none;
+  width: 100%;
+  input {
+    padding: 10px;
+  }
+}
+
+.search-location {
+  flex: 1;
+  input {
+    width: 90%;
+    padding: 12px 30px;
+    border-radius: 8px;
+    border: unset;
+    font-size: 16px;
+    text-overflow: ellipsis;
+    background-image: none;
+  }
+  position: relative;
+  &:focus-within {
+    .location-icon {
+      color: rgb(1, 126, 183);
+    }
+  }
+}
+
+.location-input {
+  width: 100%;
+}
+
+.search-btn {
+  width: 170px;
+  background-color: rgb(1, 126, 183);
+  color: rgb(255, 255, 255);
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  position: relative;
+}
+
+.search-icon {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 14px;
+  right: 30px;
+  color: rgb(121, 136, 153);
+  z-index: 1;
+}
+
+.location-icon {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 14px;
+  right: 8px;
+  color: rgb(121, 136, 153);
+  z-index: 1;
+}
+
+.home-content {
+  padding-left: 20px;
+  margin-top: 90px;
+  padding-right: 20px;
+}
+
+.content-detail {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.detail-title {
+  width: 100%;
+  height: 440px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  img {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right top;
+    z-index: -1;
+  }
+}
+
+.title {
+  width: 430px;
+  font-size: 55px;
+  text-transform: uppercase;
+  span {
+    color: rgb(236, 39, 43);
+  }
+}
+
+.detail-left {
+  position: relative;
+  width: 625px;
+}
+
+.right-item {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  p {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 15px;
+  }
+  span {
+    font-weight: 100;
+    max-width: 47em;
+    color: rgb(119, 119, 119);
+    margin: 0px;
+    font-size: 18px;
+  }
+}
+
+.separate {
+  margin-top: 30px;
+  font-size: 27px;
+  width: 28px;
+  display: flex;
+
+  height: 0.15em;
+  background: rgb(255, 242, 64);
+}
+
+.social-wrapper {
+  margin-top: 120px;
+}
+
+.social-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    background-image: linear-gradient(
+      to top,
+      rgb(255, 242, 64) 40%,
+      transparent 0px
+    );
+    font-weight: 400;
+  }
+}
+
+.social-content {
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding: 0px 50px;
+  img {
+    max-width: 20em;
+    margin: 30px auto 0;
+    object-fit: contain;
+  }
+}
+
+.css-dev-only-do-not-override-usln0u.ant-select-single{
+  height: 40px !important;
+}
+
+.customAutoComplete {
+ height: 100px;
+}
+
+@media screen and (max-width: "768px") {
+  .detail-right {
+    display: none;
+  }
+
+  .search-container {
+    display: inline-block;
+  }
+  .search-job {
+    margin-bottom: 14px;
+    padding: 0;
+    svg {
+      right: 10px;
+      top: 10px;
+    }
+  }
+
+  .title {
+    width: 350px;
+    font-size: 25px;
+  }
+
+  .search-location{
+    svg{
+      right: 10px;
+      top: 10px;
+    }
+    
+  }
+  .search-btn {
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .social-heading {
+    h1 {
+      font-size: 28px;
+    }
+  }
+}

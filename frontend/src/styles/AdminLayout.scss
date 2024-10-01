@@ -1,0 +1,41 @@
+@import "~normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap");
+
+.admin-container {
+  display: flex;
+}
+
+body {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a[href] {
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  outline: none;
+}
+
+.admin-content {
+  margin-left: 260px;
+  margin-right: 60px;
+  padding: 10px 0;
+  flex: 1;
+}
+
+.ql-editor {
+  min-height: 400px;
+}
+
+@media screen and (max-width: 768px) {
+  .admin-content {
+    margin-left: 90px;
+  }
+}
