@@ -32,5 +32,4 @@ urlpatterns = [
     path('api/v1/chats', include('chats.urls')),
     path('api/v1/permissions', include('permissions.urls')),
     path('api/v1/roles', include('roles.urls')),
-
 ]

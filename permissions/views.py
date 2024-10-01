@@ -11,6 +11,10 @@ from permissions.models import Permission
 
 class PermissionView(APIView):
 
+    def get_permissions(self):
+            return [IsAuthenticated()]
+        
+
     def get(self, request):
         queryset = Permission.objects.all()
         paginator = CustomPagination()
@@ -24,7 +28,7 @@ class PermissionView(APIView):
     def post(self, request):
         serializer = PermissionSerializer(data=request.data)
         method = request.data.get('method')
-        api_path = request.data.get('apiPath')
+        api_path = request.data.get('api_path')
        
         if Permission.objects.filter(method=method, api_path=api_path).exists():
             return Response({'Permission already exists!'}, status=status.HTTP_400_BAD_REQUEST)

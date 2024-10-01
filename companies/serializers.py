@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import Company
 
+class CompanyResumeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['id', 'name', 'logo']
+
 class UserCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
@@ -42,9 +47,9 @@ class CompanyUpdateSerializer(serializers.ModelSerializer):
         return instance
     
 class FollowCompanySerializer(serializers.Serializer):
-    companyId = serializers.IntegerField()
+    company = serializers.IntegerField()
 
-    def validate_companyId(self, value):
+    def validate_company(self, value):
         if not Company.objects.filter(id=value).exists():
             raise serializers.ValidationError("Company does not exist.")
         return value

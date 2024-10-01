@@ -32,11 +32,14 @@ INSTALLED_APPS = [
     'companies',
     'jobs',
     'resumes',
+    'corsheaders',
     'chats',
     'permissions',
     'roles',
-    'django_filters'
+    'django_filters',
 ]
+
+
 cloudinary.config(
     cloud_name=config('CLOUD_NAME'),
     api_key=config('API_KEY'),
@@ -60,7 +63,37 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'test1.middleware.CustomExceptionMiddleware',
+    'test1.middleware.PermissionMiddleware',
     'test1.middleware.CustomResponseMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 import os

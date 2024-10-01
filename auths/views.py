@@ -32,7 +32,7 @@ class CustomTokenObtainPairView(APIView):
                 {
                     'id': permission.id,
                     'name': permission.name,
-                    'apiPath': permission.api_path,
+                    'api_path': permission.api_path,
                     'method': permission.method,
                     'module': permission.module
                 }
@@ -92,7 +92,6 @@ class LogoutView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def RefreshTokenView(request):
     try:
         refresh_token = request.COOKIES.get('refresh_token')
@@ -117,7 +116,7 @@ def RefreshTokenView(request):
             {
                 'id': permission.id,
                 'name': permission.name,
-                'apiPath': permission.api_path,
+                'api_path': permission.api_path,
                 'method': permission.method,
                 'module': permission.module
             }
@@ -161,12 +160,10 @@ def RefreshTokenView(request):
 @permission_classes([IsAuthenticated])
 def GetAccountView(request):
     try:
-        refresh_token = request.COOKIES.get('refresh_token')
-        if refresh_token is None:
-            raise ValueError("No refresh token found in cookies")
+        usr_id = request.user.id
 
         # Lấy thông tin người dùng từ refresh token hiện tại
-        user = User.objects.select_related('role').get(refresh_token=refresh_token)
+        user = User.objects.select_related('role').get(id=usr_id)
 
         role = Role.objects.prefetch_related('permissions').get(id=user.role.id)
         
@@ -174,7 +171,7 @@ def GetAccountView(request):
             {
                 'id': permission.id,
                 'name': permission.name,
-                'apiPath': permission.api_path,
+                'api_path': permission.api_path,
                 'method': permission.method,
                 'module': permission.module
             }
@@ -194,6 +191,7 @@ def GetAccountView(request):
 
         return Response({'user' : user_data}, status=status.HTTP_200_OK)
     except Exception as e:
+        print(e)
         return Response("Invalid Token!", status=status.HTTP_401_UNAUTHORIZED)
 
 class RegisterView(APIView):

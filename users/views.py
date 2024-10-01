@@ -3,25 +3,25 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
-from .serializers import UserCreateSerializer, UserUpdateSerializer
+from .serializers import UserCreateSerializer, UserUpdateSerializer,GetUserSerializer
 from .models import User
 from test1.pagination import CustomPagination
 from otps.views import verify_otp
 
 class UserView(APIView):
-    # def get_permissions(self):
-    #     if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
-    #         return [IsAuthenticated()]
-    #     return [AllowAny()]
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()
         paginator = CustomPagination()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
-            serializer = UserCreateSerializer(page, many=True)
+            serializer = GetUserSerializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
-        serializer = UserCreateSerializer(queryset, many=True)
+        serializer = GetUserSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):

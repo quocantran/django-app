@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 urlpatterns = [
     path('/login', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('/logout', permission_classes([IsAuthenticated])(LogoutView.as_view()), name='logout'),
-    path('/refresh', permission_classes([IsAuthenticated])(RefreshTokenView), name='token_refresh'),
+    path('/refresh', (RefreshTokenView), name='token_refresh'),
     path('/account', permission_classes([IsAuthenticated])(GetAccountView), name='account'),
     path('/register', RegisterView.as_view(), name='register'),
 ]

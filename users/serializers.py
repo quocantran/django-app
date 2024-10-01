@@ -1,7 +1,14 @@
 from rest_framework import serializers
-from .models import User, Role, Company
+from .models import User
 from roles.serializers import UserRoleSerializer
 from companies.serializers import UserCompanySerializer
+
+class GetUserSerializer(serializers.ModelSerializer):
+    role = UserRoleSerializer()
+    company = UserCompanySerializer()
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email', 'gender' , 'address', 'age', 'role', 'company']
 
 class UserChatSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,8 +17,6 @@ class UserChatSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    role = UserRoleSerializer()
-    company = UserCompanySerializer()
     class Meta:
         model = User
         fields = [
@@ -41,9 +46,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         )
         
         if role_id:
-            user.role_id = role_id
+            user.role = role_id
         if company_id:
-            user.company_id = company_id
+            user.company = company_id
         
         user.save()
         return user

@@ -2,6 +2,13 @@ from rest_framework import serializers
 from .models import Job
 from companies.serializers import CompanyJobsSerializer
 
+class JobResumeSerializer(serializers.ModelSerializer):
+    
+        class Meta:
+            model = Job
+            fields = ['id', 'name']
+            
+
 class JobCreateSerializer(serializers.ModelSerializer):
 
     class Meta:

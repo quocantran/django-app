@@ -12,8 +12,6 @@ class GetPermissionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PermissionSerializer(serializers.ModelSerializer):
-    apiPath = serializers.CharField(source='api_path')
-
     class Meta:
         model = Permission
-        fields = ['name', 'apiPath', 'method', 'module']
+        fields = ['name', 'api_path', 'method', 'module']
