@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'permissions',
     'roles',
     'django_filters',
+    'comments',
+    
 ]
 
 
@@ -69,9 +71,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -84,6 +84,12 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -93,6 +99,7 @@ CORS_ALLOW_HEADERS = [
     "origin",
     "user-agent",
     "x-csrftoken",
+    'no-retry',
     "x-requested-with",
 ]
 

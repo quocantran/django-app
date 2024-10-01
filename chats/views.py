@@ -48,4 +48,4 @@ class CreateChatView(APIView):
         if(chat.user.id != user.id):
             return Response(status=status.HTTP_403_FORBIDDEN)
         chat.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)

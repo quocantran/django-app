@@ -21,6 +21,9 @@ class JobView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Job.objects.all()
+        company_id = request.query_params.get('company')
+        if company_id:
+            queryset = queryset.filter(company_id=company_id)
         filter_backend = DjangoFilterBackend()
         queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
@@ -56,3 +59,8 @@ class GetById(APIView):
         company = get_object_or_404(Job, pk=kwargs.get('pk'))
         serializer = JobListSerializer(company)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CountJobsView(APIView):
+    def get(self, request, *args, **kwargs):
+        count = Job.objects.count()
+        return Response(count, status=status.HTTP_200_OK)

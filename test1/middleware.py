@@ -9,22 +9,33 @@ from django.http import JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 from users.models import User
 from roles.models import Role
+import json
 
 class CustomResponseMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
+        data = None
         if isinstance(response, JsonResponse):
             try:
-                data = response.json()
-            except AttributeError:
+                data = json.loads(response.content)
+            except json.JSONDecodeError:
                 data = None
-        if isinstance(response, JsonResponse):
-            data = response.json()
+
             if response.status_code >= 400:
-                print(data)
+                # Trích xuất thông báo lỗi từ phản hồi JSON
+                error_messages = []
+                if isinstance(data, dict):
+                    for field, messages in data.items():
+                        if isinstance(messages, list):
+                            error_messages.extend(messages)
+                        else:
+                            error_messages.append(messages)
+                else:
+                    error_messages.append(str(data))
+
                 formatted_response = {
                     'statusCode': response.status_code,
-                    'message': 'error',
-                    'error': data
+                    'message': error_messages,
+                    'error': 'error'
                 }
                 return JsonResponse(formatted_response, status=response.status_code)
             else:
@@ -36,10 +47,21 @@ class CustomResponseMiddleware(MiddlewareMixin):
         elif isinstance(response, Response):
             data = response.data
             if response.status_code >= 400:
+                # Trích xuất thông báo lỗi từ phản hồi JSON
+                error_messages = []
+                if isinstance(data, dict):
+                    for field, messages in data.items():
+                        if isinstance(messages, list):
+                            error_messages.extend(messages)
+                        else:
+                            error_messages.append(messages)
+                else:
+                    error_messages.append(str(data))
+
                 formatted_response = {
                     'statusCode': response.status_code,
-                    'message': 'error',
-                    'error': data
+                    'message': error_messages,
+                    'error': 'error'
                 }
                 response.data = formatted_response
                 response.content = response.rendered_content
@@ -54,11 +76,13 @@ class CustomResponseMiddleware(MiddlewareMixin):
     
 class CustomExceptionMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
+        print(exception)
         return JsonResponse({'statusCode': 500, 'message': 'error', 'error': str(exception)}, status=500)
     
 
 class PermissionMiddleware(MiddlewareMixin):
     def process_request(self, request):
+        return None
         public_api = [
             '/api/v1/auth/account',
             '/api/v1/auth/logout',

@@ -51,6 +51,9 @@ const fetchWithInterceptor = async (
     };
   }
 
+  // Ensure credentials are included in the request
+  options.credentials = "include";
+
   let response = await fetch(url, options);
 
   // Post-response interceptor
@@ -103,6 +106,7 @@ export const fetchUsers = async (
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     }
   );
@@ -400,13 +404,16 @@ export const fetchRoles = async (
 export const fetchRoleById = async (
   id?: string
 ): Promise<IBackendRes<IRole> | undefined> => {
-  const res = await fetchWithInterceptor(`${BACKEND_URL}/api/v1/roles/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    },
-  });
+  const res = await fetchWithInterceptor(
+    `${BACKEND_URL}/api/v1/roles/get-one/${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    }
+  );
   if (!res.data) {
     notification.error({
       message: "Có lỗi xảy ra",

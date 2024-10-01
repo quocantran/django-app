@@ -69,7 +69,7 @@ class CustomTokenObtainPairView(APIView):
 
             return response
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response("Tài khoản hoặc mật khẩu không đúng!", status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]

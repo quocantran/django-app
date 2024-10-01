@@ -72,9 +72,9 @@ class FollowCompanyView(APIView):
             company = get_object_or_404(Company, id=serializer.validated_data['companyId'])
             user = request.user
             if user in company.users_followed.all():
-                return Response({"detail": "You are already following this company."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"You are already following this company."}, status=status.HTTP_400_BAD_REQUEST)
             company.users_followed.add(user)
-            return Response({"detail": "Company followed successfully."}, status=status.HTTP_200_OK)
+            return Response({"Company followed successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UnfollowCompanyView(APIView):
@@ -85,7 +85,12 @@ class UnfollowCompanyView(APIView):
             company = get_object_or_404(Company, id=serializer.validated_data['companyId'])
             user = request.user
             if user not in company.users_followed.all():
-                return Response({"detail": "You are not following this company."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"You are not following this company."}, status=status.HTTP_400_BAD_REQUEST)
             company.users_followed.remove(user)
-            return Response({"detail": "Company unfollowed successfully."}, status=status.HTTP_200_OK)
+            return Response({"Company unfollowed successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CountCompaniesView(APIView):
+    def get(self, request, *args, **kwargs):
+        count = Company.objects.count()
+        return Response(count, status=status.HTTP_200_OK)

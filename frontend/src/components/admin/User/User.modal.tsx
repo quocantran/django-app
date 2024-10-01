@@ -86,10 +86,7 @@ const UserModal = (props: IProps) => {
         gender,
         address,
         role: role?.value,
-        company: {
-          id: company?.value ?? dataInit.company?.id,
-          name: company?.label ?? dataInit.company?.name,
-        },
+        company: company?.value ?? dataInit.company?.id,
       };
 
       const res = await updateUser(user.id, user);
@@ -110,10 +107,7 @@ const UserModal = (props: IProps) => {
         gender,
         address,
         role: role.value,
-        company: {
-          id: company.value,
-          name: company.label,
-        },
+        company: company.value,
       };
 
       const res = await createUser(user);

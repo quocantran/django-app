@@ -61,3 +61,13 @@ class RoleView(APIView):
             return Response(status=status.HTTP_200_OK)
         except:
             return Response({'Role not found!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+class GetRoleById(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+
+            role = Role.objects.get(id=kwargs.get('pk'))
+            serializer = GetRoleSerializer(role)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response({'Role not found!'}, status=status.HTTP_400_BAD_REQUEST)

@@ -8,20 +8,32 @@ from .serializers import PermissionSerializer, GetPermissionSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from test1.pagination import CustomPagination
 from permissions.models import Permission
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from permissions.filters import PermissionFilter
 
 class PermissionView(APIView):
 
     def get_permissions(self):
             return [IsAuthenticated()]
         
-
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = PermissionFilter
+    ordering_fields = ['name', 'created_at', 'module']
+    pagination_class = CustomPagination
     def get(self, request):
         queryset = Permission.objects.all()
-        paginator = CustomPagination()
+        
+        # Apply filters
+        filter_backend = DjangoFilterBackend()
+        queryset = filter_backend.filter_queryset(request, queryset, self)
+
+        # Apply pagination
+        paginator = self.pagination_class()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
             serializer = GetPermissionSerializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
+        
         serializer = GetPermissionSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

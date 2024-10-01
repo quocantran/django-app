@@ -58,5 +58,6 @@ class JobUpdateSerializer(serializers.ModelSerializer):
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.location = validated_data.get('location', instance.location)
         instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance

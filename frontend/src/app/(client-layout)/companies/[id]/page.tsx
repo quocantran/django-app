@@ -117,7 +117,7 @@ const CompanyInfo = (props: any) => {
       if (res.data) {
         const jobRes = await fetchJobs({
           pageSize: 2,
-          company: res.data.id?.trim(),
+          company: res.data.id,
           companyName: res.data.name.trim(),
         });
 
@@ -169,7 +169,7 @@ const CompanyInfo = (props: any) => {
 
   useEffect(() => {
     if (company && userId) {
-      const isUserFollowing = company.usersFollow?.some(
+      const isUserFollowing = company.users_follow?.some(
         (item) => item.toString() === userId
       ) as boolean;
       setIsFollow(isUserFollowing);
@@ -269,7 +269,7 @@ const CompanyInfo = (props: any) => {
       setCompany((prev: any) => {
         return {
           ...prev,
-          usersFollow: prev?.usersFollow?.filter(
+          users_follow: prev?.users_follow?.filter(
             (item: any) => item.toString() !== userId
           ),
         };
@@ -280,7 +280,7 @@ const CompanyInfo = (props: any) => {
       setCompany((prev: any) => {
         return {
           ...prev,
-          usersFollow: [...prev?.usersFollow, userId],
+          users_follow: [...prev?.users_follow, userId],
         };
       });
 
@@ -333,7 +333,7 @@ const CompanyInfo = (props: any) => {
                 <p style={{ maxWidth: "800px" }}>{company?.address}</p>
                 <div className={cx("users-follow")}>
                   <FontAwesomeIcon icon={faUserGroup} />
-                  <span>{company?.usersFollow?.length} người theo dõi</span>
+                  <span>{company?.users_follow?.length} người theo dõi</span>
                 </div>
               </div>
             </div>

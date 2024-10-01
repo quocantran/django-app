@@ -105,11 +105,7 @@ const JobUpsert = (props: any) => {
       const job = {
         name: values.name,
         skills: values.skills,
-        company: {
-          id: cp && cp.length > 0 ? cp[0] : "",
-          name: values.company.label,
-          logo: cp && cp.length > 1 ? cp[1] : "",
-        },
+        company: cp && cp.length > 0 ? cp[0] : "",
         location: values.location,
         salary: values.salary,
         quantity: values.quantity,
@@ -135,11 +131,7 @@ const JobUpsert = (props: any) => {
       const job = {
         name: values.name,
         skills: values.skills,
-        company: {
-          id: cp && cp.length > 0 ? cp[0] : "",
-          name: values.company.label,
-          logo: cp && cp.length > 1 ? cp[1] : "",
-        },
+        company: cp && cp.length > 0 ? cp[0] : "",
         location: values.location,
         salary: values.salary,
         quantity: values.quantity,

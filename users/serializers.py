@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Role, Company
 from roles.serializers import UserRoleSerializer
 from companies.serializers import UserCompanySerializer
 
@@ -33,7 +33,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        role_id = validated_data.pop('role', 2)  # Role for normal user
+        role_id = validated_data.pop('role', 2)
         company_id = validated_data.pop('company', None)
         
         user = User.objects.create_user(
@@ -45,11 +45,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
             age=validated_data.get('age')
         )
         
+        # Lấy đối tượng Role và Company từ cơ sở dữ liệu
         if role_id:
-            user.role = role_id
+            user.role_id = role_id
         if company_id:
-            user.company = company_id
-        
+            user.company_id = company_id
+
         user.save()
         return user
 

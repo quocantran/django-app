@@ -42,7 +42,7 @@ class UserView(APIView):
     def delete(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs.get('pk'))
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 class ForgotPasswordView(APIView):
     def get(self, request, *args, **kwargs):
@@ -52,3 +52,8 @@ class ForgotPasswordView(APIView):
         if not isValid:
             return Response('Invalid OTP', status=status.HTTP_400_BAD_REQUEST)
         return Response('Mật khẩu mới đã được gửi về email của bạn!', status=status.HTTP_200_OK)
+
+class CountUsersView(APIView):
+    def get(self, request, *args, **kwargs):
+        count = User.objects.count()
+        return Response(count, status=status.HTTP_200_OK)
