@@ -3,6 +3,11 @@ from .models import User, Role, Company
 from roles.serializers import UserRoleSerializer
 from companies.serializers import UserCompanySerializer
 
+class UserComment(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'name']
+
 class GetUserSerializer(serializers.ModelSerializer):
     role = UserRoleSerializer()
     company = UserCompanySerializer()

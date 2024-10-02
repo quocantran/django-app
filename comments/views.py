@@ -4,8 +4,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Comment, Company
-from .serializers import CommentCreateSerializer
+from .serializers import CommentCreateSerializer, GetCommentByCompanySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from test1.pagination import CustomPagination
 
 class CommentCreateView(APIView):
     def get_permissions(self):
@@ -54,3 +55,22 @@ class CommentCreateView(APIView):
                 print(comment)
             return Response({"success"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetCommentByCompany(APIView):
+    def get(self, request, *args, **kwargs):
+        company_id = kwargs.get('company_id')
+        comments = Comment.objects.filter(company_id=company_id)
+        
+        # Kiểm tra query parameter để sắp xếp
+        sort = request.query_params.get('sort', '-created_at')
+        comments = comments.order_by(sort)
+        
+        paginator = CustomPagination()
+        page = paginator.paginate_queryset(comments, request)
+        
+        if page is not None:
+            serializer = GetCommentByCompanySerializer(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        
+        serializer = GetCommentByCompanySerializer(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

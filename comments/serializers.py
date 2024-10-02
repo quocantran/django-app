@@ -1,5 +1,14 @@
 from rest_framework import serializers
 from .models import Comment
+from users.serializers import UserComment
+from companies.serializers import CompanyResumeSerializer
+
+class GetCommentByCompanySerializer(serializers.ModelSerializer):
+    user = UserComment()
+    company = CompanyResumeSerializer()
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     company_id = serializers.CharField(write_only=True, required=True, error_messages={
