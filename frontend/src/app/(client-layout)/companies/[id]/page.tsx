@@ -72,8 +72,7 @@ const CompanyInfo = (props: any) => {
 
     const jobRes = await fetchJobs({
       pageSize: 2,
-      company: company?.id?.trim(),
-      companyName: company?.name.trim(),
+      company: company?.id,
       current: (meta?.current as number) + 1,
     });
 
@@ -94,8 +93,7 @@ const CompanyInfo = (props: any) => {
 
     const jobRes = await fetchJobs({
       pageSize: 2,
-      company: company?.id?.trim(),
-      companyName: company?.name.trim(),
+      company: company?.id,
       current: (meta?.current as number) - 1,
     });
 
@@ -118,13 +116,12 @@ const CompanyInfo = (props: any) => {
         const jobRes = await fetchJobs({
           pageSize: 2,
           company: res.data.id,
-          companyName: res.data.name.trim(),
         });
 
         const commentList = await getComments({
           current: 1,
           pageSize: 30,
-          company: res.data.id?.trim(),
+          company: res.data.id,
         });
         let totalLenght = commentList.data?.result?.length as number;
 
@@ -169,8 +166,8 @@ const CompanyInfo = (props: any) => {
 
   useEffect(() => {
     if (company && userId) {
-      const isUserFollowing = company.users_follow?.some(
-        (item) => item.toString() === userId
+      const isUserFollowing = company.users_followed?.some(
+        (item) => item.toString() === userId.toString()
       ) as boolean;
       setIsFollow(isUserFollowing);
     }
@@ -196,7 +193,7 @@ const CompanyInfo = (props: any) => {
 
       setCommentLoading(true);
       const res = await createComment({
-        company: company?.id as string,
+        company_id: company?.id as string,
         content: commentValue,
       });
 
@@ -225,7 +222,7 @@ const CompanyInfo = (props: any) => {
     setCommentLoading(true);
 
     const res = await createComment({
-      company: company?.id as string,
+      company_id: company?.id as string,
       content: commentValue,
     });
 
@@ -246,8 +243,7 @@ const CompanyInfo = (props: any) => {
 
     const jobRes = await fetchJobs({
       pageSize: 2,
-      company: company?.id?.trim(),
-      companyName: company?.name.trim(),
+      company: company?.id,
       name: searchValue,
     });
 
@@ -269,8 +265,8 @@ const CompanyInfo = (props: any) => {
       setCompany((prev: any) => {
         return {
           ...prev,
-          users_follow: prev?.users_follow?.filter(
-            (item: any) => item.toString() !== userId
+          users_followed: prev?.users_followed?.filter(
+            (item: any) => item.toString() !== userId.toString()
           ),
         };
       });
@@ -280,7 +276,7 @@ const CompanyInfo = (props: any) => {
       setCompany((prev: any) => {
         return {
           ...prev,
-          users_follow: [...prev?.users_follow, userId],
+          users_followed: [...prev?.users_followed, userId],
         };
       });
 
@@ -333,7 +329,7 @@ const CompanyInfo = (props: any) => {
                 <p style={{ maxWidth: "800px" }}>{company?.address}</p>
                 <div className={cx("users-follow")}>
                   <FontAwesomeIcon icon={faUserGroup} />
-                  <span>{company?.users_follow?.length} người theo dõi</span>
+                  <span>{company?.users_followed?.length} người theo dõi</span>
                 </div>
               </div>
             </div>

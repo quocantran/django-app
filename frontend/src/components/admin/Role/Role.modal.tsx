@@ -29,7 +29,7 @@ import {
   updateRole,
 } from "@/config/api";
 import { CheckSquareOutlined } from "@ant-design/icons";
-import _ from "lodash";
+import _, { isInteger } from "lodash";
 
 interface IProps {
   openModal: boolean;
@@ -105,6 +105,8 @@ const RoleModal = (props: IProps) => {
       });
       const userPermissions = groupByPermission(singleRole.permissions);
 
+      console.log(listPermissions);
+
       listPermissions.forEach((data) => {
         let allCheck = true;
         data.permissions?.forEach((y) => {
@@ -113,15 +115,17 @@ const RoleModal = (props: IProps) => {
           if (temp) {
             const isExist = temp.permissions.find((k) => k.id === y.id);
             if (isExist) {
-              form.setFieldValue(["permissions", y.id as string], true);
+              form.setFieldValue(["permissions", y.id?.toString()], true);
             } else allCheck = false;
           } else {
             allCheck = false;
           }
         });
+
         form.setFieldValue(["permissions", data.module], allCheck);
       });
     }
+    console.log(form.getFieldValue("permissions"));
   }, [listPermissions, singleRole]);
 
   const handleReset = () => {
@@ -138,8 +142,8 @@ const RoleModal = (props: IProps) => {
     setIsFetching(true);
     if (permissions) {
       for (const key in permissions) {
-        if (key.match(/^[0-9a-fA-F]{24}$/) && permissions[key] === true) {
-          checkedPermissions.push(key);
+        if (permissions[key] === true && Number.isInteger(Number(key))) {
+          checkedPermissions.push(Number(key));
         }
       }
     }

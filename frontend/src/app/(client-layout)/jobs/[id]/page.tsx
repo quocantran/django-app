@@ -78,8 +78,6 @@ const JobInfo = async (props: any) => {
               </div>
 
               <div className={cx("job-time")}>
-                <JobTransaction job={res.data} />
-
                 <Tag color="#f2f4f5">
                   <span className={cx("tag-title")}>
                     <FontAwesomeIcon icon={faClock} />

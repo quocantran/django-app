@@ -276,7 +276,7 @@ export const followCompany = async (id: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-      body: JSON.stringify({ company: id }),
+      body: JSON.stringify({ companyId: id }),
     }
   );
 
@@ -298,7 +298,7 @@ export const unFollowCompany = async (id: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-      body: JSON.stringify({ company: id }),
+      body: JSON.stringify({ companyId: id }),
     }
   );
 
@@ -1009,11 +1009,11 @@ export const createComment = async (body: ICreateComment) => {
 export const getCommentsByParent = async ({
   current = 1,
   pageSize = 1,
-  parentId = "",
+  parent = "",
   sort = "-created_at",
 }): Promise<IBackendRes<IModelPaginate<IComment>>> => {
   const res = await fetch(
-    `${BACKEND_URL}/api/v1/comments/parent/${parentId}?current=${current}&pageSize=${pageSize}&sort=${sort}`,
+    `${BACKEND_URL}/api/v1/comments/parent/${parent}?current=${current}&pageSize=${pageSize}&sort=${sort}`,
     {
       method: "GET",
       headers: {

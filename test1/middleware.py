@@ -82,7 +82,6 @@ class CustomExceptionMiddleware(MiddlewareMixin):
 
 class PermissionMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        return None
         public_api = [
             '/api/v1/auth/account',
             '/api/v1/auth/logout',
@@ -100,7 +99,6 @@ class PermissionMiddleware(MiddlewareMixin):
             '/api/v1/otps',
             '/api/v1/jobs',
             '/api/v1/users/password/forgot-password',
-            '/socket.io/'
             '/api/v1/comments',
             '/api/v1/resumes/by-job',
         ]
@@ -109,66 +107,65 @@ class PermissionMiddleware(MiddlewareMixin):
             return None
         if request.path.startswith('/api/v1/jobs/get-one/'):
             return None
+        if request.path.startswith('/api/v1/comments/parent/'):
+            return 
+        if request.path.startswith('/api/v1/users') and request.path.endswith('/password'):
+            return None
 
         # Kiểm tra nếu đường dẫn là công khai
         if request.path in public_api:
             return None
 
         auth_header = request.headers.get('Authorization')
-        if not auth_header:
-            return JsonResponse({
-                'statusCode': 401,
-                'message': 'error',
-                'error': 'Authorization header missing'
-            }, status=401)
+        if auth_header:
 
-        try:
-            # Tách token từ header
-            token = auth_header.split(' ')[1]
-            # Giải mã token để lấy user_id
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            user_id = payload['user_id']
-           
-        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, IndexError):
-            return JsonResponse({
-                'statusCode': 401,
-                'message': 'error',
-                'error': 'Token is invalid'
-            }, status=401)
+            try:
+                # Tách token từ header
+                token = auth_header.split(' ')[1]
+                # Giải mã token để lấy user_id
+                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+                user_id = payload['user_id']
+            
+            except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, IndexError):
+                return JsonResponse({
+                    'statusCode': 401,
+                    'message': 'error',
+                    'error': 'Token is invalid'
+                }, status=401)
 
-        try:
-            # Lấy user từ user_id
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return JsonResponse({
-                'statusCode': 401,
-                'message': 'error',
-                'error': 'Token is invalid'
-            }, status=401)
+            try:
+                # Lấy user từ user_id
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return JsonResponse({
+                    'statusCode': 401,
+                    'message': 'error',
+                    'error': 'Token is invalid'
+                }, status=401)
 
-        # Lấy role của user
-        usr_role = user.role
+            # Lấy role của user
+            usr_role = user.role
 
-        # Lấy tất cả các permission của role
-        permissions = list(Role.objects.get(id=usr_role.id).permissions.all())
+            # Lấy tất cả các permission của role
+            permissions = list(Role.objects.get(id=usr_role.id).permissions.all())
 
-        # Lấy api_path và method từ request
-        api_path = request.path
-        method = request.method
-        print(permissions)
-        # Kiểm tra xem role có permission với api_path và method không
-        for permission in permissions:
-            if permission.api_path == api_path and permission.method == method:
-                request.user = user
-                return None
-            elif permission.method == method and permission.api_path.endswith('/:id') and len(api_path.split("/")) == len(permission.api_path.split("/")):
+            # Lấy api_path và method từ request
+            api_path = request.path
+            method = request.method
+            # Kiểm tra xem role có permission với api_path và method không
+            for permission in permissions:
+                if permission.api_path == api_path and permission.method == method:
                     request.user = user
                     return None
+                elif permission.method == method and permission.api_path.endswith('/:id') and len(api_path.split("/")) == len(permission.api_path.split("/")):
+                        request.user = user
+                        return None
 
-        return JsonResponse({
-                'statusCode': 403,
-                'message': 'error',
-                'error': 'Permission denied'
-            }, status=403)
+            return JsonResponse({
+                    'statusCode': 403,
+                    'message': 'error',
+                    'error': 'Permission denied'
+                }, status=403)
+        
 
      

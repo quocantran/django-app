@@ -12,7 +12,14 @@ class ResumeView(APIView):
         return [IsAuthenticated()]
 
     def get(self, request, *args, **kwargs):
-        queryset = Resume.objects.all()
+        usr = request.user
+        queryset = None
+
+        if(usr.role.name == 'HR'):
+            print("HR")
+            queryset = Resume.objects.filter(company=usr.company) 
+
+        else: queryset = Resume.objects.all()
         paginator = CustomPagination()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:

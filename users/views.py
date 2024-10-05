@@ -10,10 +10,8 @@ from otps.views import verify_otp
 
 class UserView(APIView):
     def get_permissions(self):
-        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
-        return [AllowAny()]
-
+        
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()
         paginator = CustomPagination()
@@ -57,3 +55,21 @@ class CountUsersView(APIView):
     def get(self, request, *args, **kwargs):
         count = User.objects.count()
         return Response(count, status=status.HTTP_200_OK)
+    
+class ChangePasswordView(APIView):
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        old_password = request.data.get('password')
+        new_password = request.data.get('newPassword')
+        repeate_password = request.data.get('repeatedPassword')
+        if not user.check_password(old_password):
+            return Response('Mật khẩu cũ không chính xác', status=status.HTTP_400_BAD_REQUEST)
+        
+        if new_password != repeate_password:
+            return Response('Mật khẩu mới không khớp', status=status.HTTP_400_BAD_REQUEST)
+        
+        
+
+        user.set_password(new_password)
+        user.save()
+        return Response('Mật khẩu đã được thay đổi', status=status.HTTP_200_OK)

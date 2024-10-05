@@ -30,7 +30,7 @@ class CompanyCreateSerializer(serializers.ModelSerializer):
 class CompanyJobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = ['id', 'name','logo']
+        fields = ['id', 'name','logo', 'address']
 
 class CompanyUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,7 +47,7 @@ class CompanyUpdateSerializer(serializers.ModelSerializer):
         return instance
     
 class FollowCompanySerializer(serializers.Serializer):
-    company = serializers.IntegerField()
+    companyId = serializers.IntegerField()
 
     def validate_company(self, value):
         if not Company.objects.filter(id=value).exists():

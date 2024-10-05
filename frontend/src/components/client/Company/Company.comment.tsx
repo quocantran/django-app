@@ -78,9 +78,9 @@ const CompanyComment = (props: IProps) => {
       if (!commentValue.trim()) return;
       setCommentLoading(true);
       const res = await createComment({
-        company: company?.id as string,
+        company_id: company?.id as string,
         content: commentValue,
-        parentId: comment.id,
+        parent_id: comment.id,
       });
 
       if (res.data) {
@@ -108,9 +108,9 @@ const CompanyComment = (props: IProps) => {
     setCommentLoading(true);
 
     const res = await createComment({
-      company: company?.id as string,
+      company_id: company?.id as string,
       content: commentValue,
-      parentId: comment.id,
+      parent_id: comment.id,
     });
 
     if (res.data) {
@@ -126,7 +126,7 @@ const CompanyComment = (props: IProps) => {
   };
 
   const confirm: PopconfirmProps["onConfirm"] = async (e) => {
-    if (!comment.parentId) {
+    if (!comment.parent) {
       const res = await deleteComment(comment.id as string);
       if (res.statusCode !== 200) {
         notification.error({
@@ -144,8 +144,6 @@ const CompanyComment = (props: IProps) => {
       );
       message.success("Xóa bình luận thành công");
     } else {
-      console.log("delete child comment");
-
       const res = await deleteComment(comment.id as string);
       if (res.statusCode !== 200) {
         notification.error({
@@ -175,7 +173,7 @@ const CompanyComment = (props: IProps) => {
     setLoading(true);
     const res = await getCommentsByParent({
       current: current,
-      parentId: comment.id,
+      parent: comment.id,
       pageSize: 1,
     });
 

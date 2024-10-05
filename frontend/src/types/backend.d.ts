@@ -50,7 +50,7 @@ export interface ICompany {
   address: string;
   logo?: string;
   description?: string;
-  users_follow?: string[];
+  users_followed?: string[];
   createdBy?: string;
   isDeleted?: boolean;
   deletedAt?: boolean | null;
@@ -143,7 +143,7 @@ export interface ICreateResume {
 }
 
 export interface IPermission {
-  id?: int;
+  id?: string;
   name: string;
   api_path: string;
   method: string;
@@ -157,11 +157,11 @@ export interface IPermission {
 }
 
 export interface IRole {
-  id?: int;
+  id?: string;
   name: string;
   description: string;
   is_active: boolean;
-  permissions: IPermission[] | string[];
+  permissions: IPermission[] | int[];
 
   createdBy?: string;
   isDeleted?: boolean;
@@ -207,7 +207,7 @@ export interface IComment {
     id?: int;
     name: string;
   };
-  parentId?: string;
+  parent: string;
   left: number;
   right: number;
   createdBy?: string;
@@ -219,6 +219,6 @@ export interface IComment {
 
 export interface ICreateComment {
   content: string;
-  parentId?: string;
-  company: string;
+  parent_id?: int;
+  company_id: string;
 }

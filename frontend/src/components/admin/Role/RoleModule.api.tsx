@@ -23,10 +23,11 @@ const ModuleApi = (props: IProps) => {
   const { form, listPermissions } = props;
 
   const handleSwitchAll = (value: boolean, name: string) => {
-    const child = listPermissions?.find((item) => item.module === name);
+    const child = listPermissions?.find((item) => item.module === name && item);
     if (child) {
       child?.permissions?.forEach((item) => {
-        if (item.id) form.setFieldValue(["permissions", item.id], value);
+        if (item.id)
+          form.setFieldValue(["permissions", item.id.toString()], value);
       });
     }
   };
@@ -37,12 +38,12 @@ const ModuleApi = (props: IProps) => {
     //check all
     const temp = listPermissions?.find((item) => item.module === parent);
     if (temp) {
-      const restPermission = temp?.permissions?.filter(
-        (item) => item.id !== child
+      let restPermission = temp?.permissions?.filter(
+        (item) => item.id?.toString() !== child
       );
       if (restPermission && restPermission.length) {
         const allTrue = restPermission.every((item) =>
-          form.getFieldValue(["permissions", item.id as string])
+          form.getFieldValue(["permissions", item.id?.toString()])
         );
         form.setFieldValue(["permissions", parent], allTrue && value);
       }
@@ -91,13 +92,13 @@ const ModuleApi = (props: IProps) => {
                       }}
                     >
                       <ProFormSwitch
-                        name={["permissions", value.id as string]}
+                        name={["permissions", value.id?.toString()]}
                         fieldProps={{
                           defaultChecked: false,
                           onChange: (v) =>
                             handleSingleCheck(
                               v,
-                              value.id as string,
+                              value.id?.toString() as string,
                               item.module
                             ),
                         }}
