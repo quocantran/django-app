@@ -139,7 +139,7 @@ export default function Home() {
 
             <div className={cx("social-wrapper")}>
               <div className={cx("social-heading")}>
-                <h1>Glints Trên Truyền Thông</h1>
+                <h1>PTIT Trên Truyền Thông</h1>
               </div>
               <div className={cx("social-content")}>
                 <img loading="lazy" src="/images/cna.png" alt="cna" />

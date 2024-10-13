@@ -67,6 +67,11 @@ class CustomTokenObtainPairView(APIView):
                 samesite='Strict'  # Ngăn chặn CSRF
             )
 
+            response.set_cookie(
+                key="userId",
+                value=str(user.id),
+            )
+
             return response
 
         return Response("Tài khoản hoặc mật khẩu không đúng!", status=status.HTTP_400_BAD_REQUEST)

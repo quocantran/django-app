@@ -82,6 +82,7 @@ class CustomExceptionMiddleware(MiddlewareMixin):
 
 class PermissionMiddleware(MiddlewareMixin):
     def process_request(self, request):
+        
         public_api = [
             '/api/v1/auth/account',
             '/api/v1/auth/logout',
@@ -89,7 +90,6 @@ class PermissionMiddleware(MiddlewareMixin):
             '/api/v1/resumes/by-user',
             '/api/v1/auth/login',
             '/api/v1/auth/register',
-            '/api/v1/chats',
             '/api/v1/companies/follow',
             '/api/v1/files/upload',
             '/api/v1/auth/logout',
@@ -99,7 +99,6 @@ class PermissionMiddleware(MiddlewareMixin):
             '/api/v1/otps',
             '/api/v1/jobs',
             '/api/v1/users/password/forgot-password',
-            '/api/v1/comments',
             '/api/v1/resumes/by-job',
         ]
 
@@ -107,9 +106,13 @@ class PermissionMiddleware(MiddlewareMixin):
             return None
         if request.path.startswith('/api/v1/jobs/get-one/'):
             return None
-        if request.path.startswith('/api/v1/comments/parent/'):
-            return 
+        if request.path.startswith('/api/v1/comments'):
+            return None
+        if request.path.startswith('/api/v1/chats'):
+            return None
         if request.path.startswith('/api/v1/users') and request.path.endswith('/password'):
+            return None
+        if request.path.startswith('socket.io/'):
             return None
 
         # Kiểm tra nếu đường dẫn là công khai

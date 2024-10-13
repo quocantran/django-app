@@ -20,11 +20,23 @@ class CreateChatView(APIView):
         return [AllowAny()]
 
     def get(self, request, *args, **kwargs):
+        
         queryset = Chat.objects.all()
         filter_backend = DjangoFilterBackend()
         queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
         page = paginator.paginate_queryset(queryset, request)
+
+        if(request.query_params.get('current') == None):
+            request.query_params._mutable = True
+            request.query_params['current'] = paginator.page.paginator.num_pages
+            request.query_params._mutable = False
+        
+        
+        
+        # Paginate the queryset again with the updated page parameter
+        page = paginator.paginate_queryset(queryset, request)
+
         if page is not None:
             serializer = GetChatSerializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
@@ -46,6 +58,6 @@ class CreateChatView(APIView):
         
         chat = get_object_or_404(Chat, pk=kwargs.get('pk'))
         if(chat.user.id != user.id):
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            return Response("Bạn không có quyền xóa!",status=status.HTTP_403_FORBIDDEN)
         chat.delete()
         return Response(status=status.HTTP_200_OK)

@@ -109,7 +109,7 @@ const Header: React.FC = () => {
     <div className={cx("wrapper")}>
       <div className={cx("container")}>
         <Link href="/">
-          <img className={cx("logo")} src="/images/logo.webp" alt="logo" />
+          <img className={cx("logo")} src="/images/logo.png" alt="logo" />
         </Link>
         <div className={cx("header-left")}>
           <div className={cx("header-item")}>

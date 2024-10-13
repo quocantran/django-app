@@ -12,7 +12,7 @@ import LayoutApp from "@/components/layout/LayoutApp";
 import LayoutAdmin from "@/components/layout/LayoutAdmin";
 import "react-quill/dist/quill.snow.css";
 export const metadata: Metadata = {
-  title: "Glints - Kênh Tuyển Dụng - Trang Tìm Kiếm Việc Làm Uy Tín",
+  title: "PTIT - Kênh Tuyển Dụng - Trang Tìm Kiếm Việc Làm Uy Tín",
   description: "Welcome to Next.js",
 };
 

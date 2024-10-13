@@ -22,6 +22,21 @@ export interface IMeta {
   total: number;
 }
 
+export interface IChat {
+  id?: string;
+  file_url?: string;
+  content: string;
+  user?: {
+    id: string;
+    name: string;
+  };
+  createdBy?: string;
+  isDeleted?: boolean;
+  deletedAt?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface IAccount {
   access_token: string;
   user: {
@@ -219,6 +234,6 @@ export interface IComment {
 
 export interface ICreateComment {
   content: string;
-  parent_id?: int;
-  company_id: string;
+  parentid?: int;
+  companyid: string;
 }

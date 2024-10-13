@@ -14,10 +14,12 @@ class GetChatSerializer(serializers.ModelSerializer):
 class ChatSerializer(serializers.ModelSerializer):
     content = serializers.CharField(required=False, allow_blank=True)
     file_url = serializers.URLField(required=False, allow_blank=True)
+    user = UserChatSerializer(read_only=True)
 
     class Meta:
         model = Chat
-        fields = ['content', 'file_url']
+        fields = ['content', 'file_url', 'user', 'updated_at', 'created_at']  # Loại bỏ dấu phẩy ở cuối
+        read_only_fields = ['user', 'updated_at', 'created_at']
 
     def validate(self, data):
         content = data.get('content')
