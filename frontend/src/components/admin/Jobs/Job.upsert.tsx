@@ -9,6 +9,7 @@ import {
   Upload,
   Breadcrumb,
   Divider,
+  notification,
 } from "antd";
 import {
   FooterToolbar,
@@ -120,10 +121,22 @@ const JobUpsert = (props: any) => {
         is_active: values.is_active,
       };
 
-      const res = await updateJob(dataUpdate.id, job);
-      if (res.data) {
-        message.success(`Cập nhật công việc ${job.name} thành công`);
-        navigate.push("/admin/jobs");
+      try {
+        const res = await updateJob(dataUpdate.id, job);
+        if (res.data) {
+          message.success(`Cập nhật công việc ${job.name} thành công`);
+          navigate.push("/admin/jobs");
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     } else {
       //create
@@ -142,10 +155,22 @@ const JobUpsert = (props: any) => {
         is_active: values.is_active,
       };
 
-      const res = await createJob(job);
-      if (res.data) {
-        message.success(`Tạo mới công việc ${job.name} thành công`);
-        navigate.push("/admin/jobs");
+      try {
+        const res = await createJob(job);
+        if (res.data) {
+          message.success(`Tạo mới công việc ${job.name} thành công`);
+          navigate.push("/admin/jobs");
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     }
   };

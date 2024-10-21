@@ -76,7 +76,6 @@ const JobClient = (props: any) => {
   useEffect(() => {
     if (sortChanged.current) {
       sortChanged.current = false;
-      return;
     }
     if (current > meta?.pages) return;
     const fetchData = async (page: number) => {

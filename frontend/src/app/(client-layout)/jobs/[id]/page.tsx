@@ -18,7 +18,6 @@ import dayjs from "dayjs";
 import JobButton from "@/components/client/Job/Job.button";
 import { IJob } from "@/types/backend";
 import Link from "next/link";
-import JobTransaction from "@/components/client/Job/Job.transaction";
 
 const cx = classNames.bind(styles);
 

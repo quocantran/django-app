@@ -73,6 +73,7 @@ const CompanyInfo = (props: any) => {
     const jobRes = await fetchJobs({
       pageSize: 2,
       company: company?.id,
+      active: true,
       current: (meta?.current as number) + 1,
     });
 
@@ -94,6 +95,7 @@ const CompanyInfo = (props: any) => {
     const jobRes = await fetchJobs({
       pageSize: 2,
       company: company?.id,
+      active: true,
       current: (meta?.current as number) - 1,
     });
 
@@ -115,6 +117,7 @@ const CompanyInfo = (props: any) => {
       if (res.data) {
         const jobRes = await fetchJobs({
           pageSize: 2,
+          active: true,
           company: res.data.id,
         });
 
@@ -244,6 +247,7 @@ const CompanyInfo = (props: any) => {
     const jobRes = await fetchJobs({
       pageSize: 2,
       company: company?.id,
+      active: true,
       name: searchValue,
     });
 

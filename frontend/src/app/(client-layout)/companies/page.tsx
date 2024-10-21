@@ -43,7 +43,7 @@ const CompanyClient = (props: any) => {
     setLoading(true);
     if (search) {
       const fetchData = async () => {
-        const res = await fetchCompanies(current, search);
+        const res = await fetchCompanies(1, search, 100);
         const data = res?.data;
         setCompanies(data?.result || []);
 
@@ -54,7 +54,7 @@ const CompanyClient = (props: any) => {
       fetchData();
     } else {
       const fetchData = async () => {
-        const res = await fetchCompanies(current, search);
+        const res = await fetchCompanies(current, search, 9);
         setCompanies(res?.data?.result || []);
 
         setMeta(res?.data?.meta);

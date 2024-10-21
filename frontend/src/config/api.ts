@@ -144,13 +144,6 @@ export const createUser = async (body: IUser) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
 
   return res;
 };
@@ -165,13 +158,6 @@ export const updateUser = async (id: string | undefined, body: IUser) => {
 
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
 
   return res;
 };
@@ -202,13 +188,6 @@ export const deleteUser = async (id: string) => {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
   return res;
 };
 
@@ -274,14 +253,7 @@ export const fetchCompanies = async (
       cache: "no-cache",
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-  } else {
-    return res;
-  }
+  return res;
 };
 
 export const countCompanies = async (): Promise<IBackendRes<number>> => {
@@ -364,13 +336,6 @@ export const createCompany = async (body: ICompany) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
   return res;
 };
 
@@ -386,13 +351,6 @@ export const updateCompany = async (id: string, body: ICompany) => {
       body: JSON.stringify(body),
     }
   );
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
   return res;
 };
 
@@ -407,12 +365,6 @@ export const deleteCompany = async (id: string) => {
       },
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-    });
-    return;
-  }
   return res;
 };
 
@@ -435,7 +387,7 @@ export const fetchRoles = async (
       },
     }
   );
-  if (!res) {
+  if (res.statusCode === 400 || res.statusCode === 403) {
     notification.error({
       message: "Có lỗi xảy ra",
       description: res.message,
@@ -458,14 +410,8 @@ export const fetchRoleById = async (
       },
     }
   );
-  if (!res.data) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-  } else {
-    return res;
-  }
+
+  return res;
 };
 
 export const createRole = async (body: IRole) => {
@@ -477,13 +423,6 @@ export const createRole = async (body: IRole) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
   return res;
 };
 
@@ -496,13 +435,7 @@ export const updateRole = async (id: string, body: IRole) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
+
   return res;
 };
 
@@ -514,13 +447,7 @@ export const deleteRole = async (id: string) => {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     },
   });
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
+
   return res;
 };
 
@@ -531,6 +458,7 @@ export const fetchJobs = async ({
   name = "",
   sort = "created_at",
   location = "",
+  active = false,
   pageSize = 10,
   company = "",
   companyName = "",
@@ -544,7 +472,7 @@ export const fetchJobs = async ({
       location ? `&location=${location}` : ""
     }${company ? `&company=${company}` : ""}${
       companyName ? `&companyName=${companyName}` : ""
-    }`,
+    }${active == true ? `&active=${active}` : ""}`,
     {
       method: "GET",
       headers: {
@@ -619,13 +547,7 @@ export const createJob = async (body: IJob) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
+
   return res;
 };
 
@@ -638,13 +560,7 @@ export const updateJob = async (id: string, body: IJob) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
+
   return res;
 };
 
@@ -656,13 +572,7 @@ export const deleteJob = async (id: string) => {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     },
   });
-  if (res.statusCode !== 200) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
+
   return res;
 };
 
@@ -685,15 +595,7 @@ export const fetchResumes = async (
       },
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  } else {
-    return res;
-  }
+  return res;
 };
 
 export const fetchResumeByUser = async (): Promise<IBackendRes<IResume[]>> => {
@@ -767,13 +669,6 @@ export const updateResumeStatus = async (
       body: JSON.stringify({ status }),
     }
   );
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  }
   return res;
 };
 
@@ -801,14 +696,8 @@ export const fetchPermissions = async (
       },
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-  } else {
-    return res;
-  }
+
+  return res;
 };
 
 export const createPermission = async (body: IPermission) => {
@@ -820,15 +709,7 @@ export const createPermission = async (body: IPermission) => {
     },
     body: JSON.stringify(body),
   });
-  if (res.statusCode === 400) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  } else {
-    return res;
-  }
+  return res;
 };
 
 export const updatePermission = async (id: string, body: IPermission) => {
@@ -843,14 +724,7 @@ export const updatePermission = async (id: string, body: IPermission) => {
       body: JSON.stringify(body),
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-  } else {
-    return res;
-  }
+  return res;
 };
 
 export const deletePermission = async (id: string) => {
@@ -864,15 +738,7 @@ export const deletePermission = async (id: string) => {
       },
     }
   );
-  if (!res) {
-    notification.error({
-      message: "Có lỗi xảy ra",
-      description: res.message,
-    });
-    return;
-  } else {
-    return res;
-  }
+  return res;
 };
 
 // Auth Apis

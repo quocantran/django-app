@@ -6,7 +6,7 @@ class Job(models.Model):
     description = models.TextField()
     skills = models.JSONField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='jobs')
-    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    salary = models.DecimalField(max_digits=20, decimal_places=0)
     level = models.CharField(max_length=50)
     start_date = models.DateTimeField()
     quantity = models.IntegerField()

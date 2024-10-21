@@ -12,16 +12,17 @@ from users.models import User
 from mails.views import send_otp_email_thread,send_new_password_thread
 import threading
 import json
+import test1.settings as settings
 
 # Kết nối tới Redis
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
+redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=16454, db=0, password=settings.REDIS_PASSWORD, decode_responses=True)
 
 class OtpCreateView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             curr_user = User.objects.get(email=request.data.get('email'))
         except :
-            return Response('User not found', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Email không tồn tại trong hệ thống!', status=status.HTTP_400_BAD_REQUEST)
         
         exist_usr = redis_client.get(request.data.get('email'))
         if exist_usr:

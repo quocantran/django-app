@@ -43,7 +43,7 @@ class PermissionView(APIView):
         api_path = request.data.get('api_path')
        
         if Permission.objects.filter(method=method, api_path=api_path).exists():
-            return Response({'Permission already exists!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response('Permission already exists!', status=status.HTTP_400_BAD_REQUEST)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

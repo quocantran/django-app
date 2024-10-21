@@ -86,21 +86,24 @@ class PermissionMiddleware(MiddlewareMixin):
         public_api = [
             '/api/v1/auth/account',
             '/api/v1/auth/logout',
-            '/api/v1/resumes',
             '/api/v1/resumes/by-user',
             '/api/v1/auth/login',
             '/api/v1/auth/register',
             '/api/v1/companies/follow',
             '/api/v1/files/upload',
             '/api/v1/auth/logout',
-            '/api/v1/companies',
             '/api/v1/companies/unfollow',
             '/api/v1/auth/refresh',
             '/api/v1/otps',
-            '/api/v1/jobs',
             '/api/v1/users/password/forgot-password',
             '/api/v1/resumes/by-job',
         ]
+
+        if request.path == '/api/v1/companies' and (request.method == 'GET' or request.method == 'OPTIONS'):
+            return None
+
+        if request.path == '/api/v1/jobs' and (request.method == 'GET' or request.method == 'OPTIONS'):
+            return None
 
         if request.path.startswith('/api/v1/companies/get-one/'):
             return None
@@ -108,11 +111,7 @@ class PermissionMiddleware(MiddlewareMixin):
             return None
         if request.path.startswith('/api/v1/comments'):
             return None
-        if request.path.startswith('/api/v1/chats'):
-            return None
         if request.path.startswith('/api/v1/users') and request.path.endswith('/password'):
-            return None
-        if request.path.startswith('socket.io/'):
             return None
 
         # Kiểm tra nếu đường dẫn là công khai
@@ -151,7 +150,6 @@ class PermissionMiddleware(MiddlewareMixin):
 
             # Lấy tất cả các permission của role
             permissions = list(Role.objects.get(id=usr_role.id).permissions.all())
-
             # Lấy api_path và method từ request
             api_path = request.path
             method = request.method
@@ -159,9 +157,11 @@ class PermissionMiddleware(MiddlewareMixin):
             for permission in permissions:
                 if permission.api_path == api_path and permission.method == method:
                     request.user = user
+                    print(permission.api_path, permission.method)
                     return None
-                elif permission.method == method and permission.api_path.endswith('/:id') and len(api_path.split("/")) == len(permission.api_path.split("/")):
+                elif permission.method == method and permission.api_path.endswith('/:id') and len(api_path.split("/")) == len(permission.api_path.split("/")) and api_path.split("/")[3] == permission.api_path.split("/")[3]:
                         request.user = user
+                        print(permission.api_path, permission.method)
                         return None
 
             return JsonResponse({

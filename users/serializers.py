@@ -38,7 +38,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        role_id = validated_data.pop('role', 2)
+        normal_user_role = Role.objects.get(name='NORMAL_USER')
+        role_id = validated_data.pop('role', normal_user_role.id)
         company_id = validated_data.pop('company', None)
         
         user = User.objects.create_user(

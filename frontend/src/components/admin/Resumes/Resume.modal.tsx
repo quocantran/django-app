@@ -36,12 +36,24 @@ const ResumeModal = (props: IProps) => {
     setIsSubmit(true);
 
     const status = form.getFieldValue("status");
-    const res = await updateResumeStatus(dataInit?.id, status);
-    if (res.data) {
-      message.success("Update Resume status thành công!");
-      setDataInit(null);
-      setOpenModal(false);
-      setReload(!reload);
+    try {
+      const res = await updateResumeStatus(dataInit?.id, status);
+      if (res.data) {
+        message.success("Update Resume status thành công!");
+        setDataInit(null);
+        setOpenModal(false);
+        setReload(!reload);
+      } else {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: res.message,
+        });
+      }
+    } catch (e) {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: "Bạn không có quyền thực hiện thao tác này",
+      });
     }
 
     setIsSubmit(false);

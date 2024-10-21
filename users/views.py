@@ -7,13 +7,21 @@ from .serializers import UserCreateSerializer, UserUpdateSerializer,GetUserSeria
 from .models import User
 from test1.pagination import CustomPagination
 from otps.views import verify_otp
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from .filters import UserFilter
 
 class UserView(APIView):
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = UserFilter
+    ordering_fields = ['name']
+    pagination_class = CustomPagination
     def get_permissions(self):
             return [IsAuthenticated()]
         
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()
+        filter_backend = DjangoFilterBackend()
+        queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
@@ -68,8 +76,6 @@ class ChangePasswordView(APIView):
         if new_password != repeate_password:
             return Response('Mật khẩu mới không khớp', status=status.HTTP_400_BAD_REQUEST)
         
-        
-
         user.set_password(new_password)
         user.save()
         return Response('Mật khẩu đã được thay đổi', status=status.HTTP_200_OK)

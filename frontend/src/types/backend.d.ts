@@ -234,6 +234,6 @@ export interface IComment {
 
 export interface ICreateComment {
   content: string;
-  parentid?: int;
-  companyid: string;
+  parent_id?: int;
+  company_id: string;
 }

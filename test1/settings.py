@@ -10,7 +10,9 @@ DEBUG = True
 
 SECRET_KEY = config('SECRET_KEY')
 
-ALLOWED_HOSTS = []
+REDIS_HOST = config('REDIS_HOST')
+REDIS_PASSWORD = config('REDIS_PASS')
+
 
 # Application definition
 
@@ -33,20 +35,20 @@ INSTALLED_APPS = [
     'jobs',
     'resumes',
     'corsheaders',
-    'chats',
     'permissions',
     'roles',
     'django_filters',
     'comments',
-    
 ]
-
 
 cloudinary.config(
     cloud_name=config('CLOUD_NAME'),
     api_key=config('API_KEY'),
     api_secret=config('API_SECRET')
 )
+
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
@@ -71,7 +73,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+#origin cors 
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -140,8 +144,8 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': config('JWT_ALGORITHM'),
@@ -155,7 +159,9 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-WSGI_APPLICATION = 'test1.wsgi.application'
+# WSGI_APPLICATION = 'test1.wsgi.application'
+
+ASGI_APPLICATION = 'test1.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

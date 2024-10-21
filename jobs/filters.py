@@ -6,8 +6,9 @@ class JobFilter(filters.FilterSet):
     name = filters.CharFilter(field_name='name', lookup_expr='iregex')
     location = filters.CharFilter(field_name='location', lookup_expr='icontains')
     created_at = filters.DateFromToRangeFilter()
+    updated_at = filters.DateFromToRangeFilter()
     sort = filters.OrderingFilter(fields=['name', 'created_at', 'location', 'updated_at'])
 
     class Meta:
         model = Job
-        fields = ['name', 'created_at', 'location']
+        fields = ['name', 'created_at', 'updated_at','location']

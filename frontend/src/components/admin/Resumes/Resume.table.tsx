@@ -95,7 +95,7 @@ const ResumeTable = (props: IProps) => {
       dataIndex: "updated_at",
       key: "updated_at",
       sorter: (a: IResume, b: IResume) =>
-        dayjs(a.updated_at).unix() - dayjs(b.updated_at).unix(),
+        dayjs(b.updated_at).unix() - dayjs(a.updated_at).unix(),
 
       render: (updated_at: string) => dayjs(updated_at).format("YYYY-MM-DD"),
     },

@@ -107,8 +107,19 @@ export const accountSlice = createSlice({
         state.user.id = action?.payload?.user?.id;
         state.user.email = action.payload.user?.email;
         state.user.name = action.payload.user?.name;
-        state.user.role = action?.payload?.user?.role;
-        state.user.permissions = action?.payload?.user?.permissions;
+        state.user.role = {
+          id: action?.payload?.user?.role?.id ?? "",
+          name: action?.payload?.user?.role?.name ?? "",
+        };
+        state.user.permissions = action?.payload?.user?.permissions.map(
+          (permission: any) => ({
+            id: permission.id ?? "",
+            name: permission.name,
+            api_path: permission.api_path,
+            method: permission.method,
+            module: permission.module,
+          })
+        );
       }
     });
 

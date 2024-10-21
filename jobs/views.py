@@ -12,7 +12,7 @@ from test1.pagination import CustomPagination
 class JobView(APIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = JobFilter
-    ordering_fields = ['name', 'created_at', 'location']
+    ordering_fields = ['name','location']
     pagination_class = CustomPagination
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
@@ -21,12 +21,20 @@ class JobView(APIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Job.objects.all()
+        if request.query_params.get('active') == 'true':
+            queryset = queryset.filter(is_active=True)
+    
         company_id = request.query_params.get('company')
         if company_id:
             queryset = queryset.filter(company_id=company_id)
         filter_backend = DjangoFilterBackend()
         queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
+        if(request.query_params.get('sort') == 'updated_at'):
+            queryset = queryset.order_by('-updated_at')
+        if(request.query_params.get('sort') == 'created_at'):
+            queryset = queryset.order_by('-created_at')
+       
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
             serializer = JobListSerializer(page, many=True)

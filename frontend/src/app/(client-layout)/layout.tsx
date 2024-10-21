@@ -32,10 +32,6 @@ export default function RootLayout({
                 <LayoutApp>
                   <Header />
 
-                  <div>
-                    <Chat />
-                  </div>
-
                   {children}
 
                   <Footer />

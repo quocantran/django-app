@@ -38,6 +38,8 @@ export default function Home() {
       const res = await fetchJobs({
         name: debounceValue,
         location: locationValue,
+        active: true,
+        pageSize: 1000,
       });
       if (res && res.data) {
         let jobNameList = res.data.result.map((job) => job.name);

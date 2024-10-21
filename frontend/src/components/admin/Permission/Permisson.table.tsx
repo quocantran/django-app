@@ -1,6 +1,6 @@
 "use client";
 import { IPermission } from "@/types/backend";
-import { Button, Input, Popconfirm, Space, Table } from "antd";
+import { Button, Input, notification, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import React, { useEffect, useRef, useState } from "react";
@@ -106,7 +106,7 @@ const PermissionTable = (props: IProps) => {
       dataIndex: "updated_at",
       key: "updated_at",
       sorter: (a: IPermission, b: IPermission) =>
-        dayjs(a.updated_at).unix() - dayjs(b.updated_at).unix(),
+        dayjs(b.updated_at).unix() - dayjs(a.updated_at).unix(),
 
       render: (updated_at: string) => dayjs(updated_at).format("YYYY-MM-DD"),
     },
@@ -136,8 +136,15 @@ const PermissionTable = (props: IProps) => {
               title={"Xác nhận xóa quyền hạn"}
               description={"Bạn có chắc chắn muốn xóa quyền hạn này ?"}
               onConfirm={async () => {
-                await deletePermission(entity.id);
-                setReload(!reload);
+                try {
+                  await deletePermission(entity.id);
+                  setReload(!reload);
+                } catch (e) {
+                  notification.error({
+                    message: "Có lỗi xảy ra",
+                    description: "Bạn không có quyền thực hiện thao tác này",
+                  });
+                }
               }}
               okText="Xác nhận"
               cancelText="Hủy"

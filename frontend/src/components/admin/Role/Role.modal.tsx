@@ -156,11 +156,24 @@ const RoleModal = (props: IProps) => {
         is_active,
         permissions: checkedPermissions,
       };
-      const res = await updateRole(singleRole.id, role);
-      if (res) {
-        message.success("Cập nhật role thành công");
-        form.resetFields();
-        handleReset();
+
+      try {
+        const res = await updateRole(singleRole.id, role);
+        if (res) {
+          message.success("Cập nhật role thành công");
+          form.resetFields();
+          handleReset();
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     } else {
       //create
@@ -171,11 +184,23 @@ const RoleModal = (props: IProps) => {
         is_active,
         permissions: checkedPermissions,
       };
-      const res = await createRole(role);
-      if (res) {
-        message.success("Thêm mới role thành công");
-        form.resetFields();
-        handleReset();
+      try {
+        const res = await createRole(role);
+        if (res) {
+          message.success("Thêm mới role thành công");
+          form.resetFields();
+          handleReset();
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     }
   };

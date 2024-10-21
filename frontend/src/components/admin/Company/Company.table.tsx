@@ -1,6 +1,6 @@
 "use client";
 import { ICompany } from "@/types/backend";
-import { Button, Input, Popconfirm, Space, Table } from "antd";
+import { Button, Input, notification, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
@@ -71,7 +71,7 @@ const CompanyTable = (props: IProps) => {
       dataIndex: "updated_at",
       key: "updated_at",
       sorter: (a: ICompany, b: ICompany) =>
-        dayjs(a.updated_at).unix() - dayjs(b.updated_at).unix(),
+        dayjs(b.updated_at).unix() - dayjs(a.updated_at).unix(),
 
       render: (updated_at: string) => dayjs(updated_at).format("YYYY-MM-DD"),
     },
@@ -101,8 +101,15 @@ const CompanyTable = (props: IProps) => {
               title={"Xác nhận xóa công ty"}
               description={"Bạn có chắc chắn muốn xóa công ty này ?"}
               onConfirm={async () => {
-                await deleteCompany(entity.id);
-                setReload(!reload);
+                try {
+                  await deleteCompany(entity.id);
+                  setReload(!reload);
+                } catch (err) {
+                  notification.error({
+                    message: "Có lỗi xảy ra",
+                    description: "Bạn không có quyền thực hiện thao tác này",
+                  });
+                }
               }}
               okText="Xác nhận"
               cancelText="Hủy"

@@ -88,14 +88,24 @@ const UserModal = (props: IProps) => {
         role: role?.value,
         company: company?.value ?? dataInit.company?.id,
       };
-
-      const res = await updateUser(user.id, user);
-
-      if (res) {
-        message.success("Cập nhật user thành công");
-        setOpenModal(false);
-        setDataInit(null);
-        setReload(!reload);
+      try {
+        const res = await updateUser(user.id, user);
+        if (res.data) {
+          message.success("Cập nhật user thành công");
+          setOpenModal(false);
+          setDataInit(null);
+          setReload(!reload);
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     } else {
       //create
@@ -109,13 +119,24 @@ const UserModal = (props: IProps) => {
         role: role.value,
         company: company.value,
       };
-
-      const res = await createUser(user);
-      if (res.data) {
-        message.success("Thêm mới user thành công");
-        setOpenModal(false);
-        setDataInit(null);
-        setReload(!reload);
+      try {
+        const res = await createUser(user);
+        if (res.data) {
+          message.success("Thêm mới user thành công");
+          setOpenModal(false);
+          setDataInit(null);
+          setReload(!reload);
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     }
   };

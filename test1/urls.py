@@ -29,7 +29,6 @@ urlpatterns = [
     path('api/v1/jobs', include('jobs.urls')),
     path('api/v1/resumes', include('resumes.urls')),
     path('api/v1/otps', include('otps.urls')),
-    path('api/v1/chats', include('chats.urls')),
     path('api/v1/permissions', include('permissions.urls')),
     path('api/v1/roles', include('roles.urls')),
     path('api/v1/comments', include('comments.urls')),

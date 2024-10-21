@@ -1,5 +1,5 @@
 "use client";
-import { Row, Col, message } from "antd";
+import { Row, Col, message, notification } from "antd";
 import {
   ModalForm,
   ProCard,
@@ -35,12 +35,23 @@ const PermissionModal = (props: IProps) => {
         method,
         module,
       };
-
-      const res = await updatePermission(dataInit.id, permission);
-      if (res.data) {
-        message.success(`Cập nhật quyền hạn ${permission.name} thành công`);
-        setOpenModal(false);
-        setReload(!reload);
+      try {
+        const res = await updatePermission(dataInit.id, permission);
+        if (res.data) {
+          message.success(`Cập nhật quyền hạn ${permission.name} thành công`);
+          setOpenModal(false);
+          setReload(!reload);
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (e) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     } else {
       //create
@@ -50,11 +61,24 @@ const PermissionModal = (props: IProps) => {
         method,
         module,
       };
-      const res = await createPermission(permission);
-      if (res.data) {
-        message.success(`Thêm mới quyền hạn ${permission.name} thành công`);
-        setOpenModal(false);
-        setReload(!reload);
+
+      try {
+        const res = await createPermission(permission);
+        if (res.data) {
+          message.success(`Thêm mới quyền hạn ${permission.name} thành công`);
+          setOpenModal(false);
+          setReload(!reload);
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     }
   };

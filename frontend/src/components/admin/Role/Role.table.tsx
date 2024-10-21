@@ -1,6 +1,14 @@
 "use client";
 import { IRole } from "@/types/backend";
-import { Button, Input, Popconfirm, Space, Table, Tag } from "antd";
+import {
+  Button,
+  Input,
+  notification,
+  Popconfirm,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import React, { useEffect, useRef, useState } from "react";
@@ -92,7 +100,7 @@ const RoleTable = (props: IProps) => {
       dataIndex: "updated_at",
       key: "updated_at",
       sorter: (a: IRole, b: IRole) =>
-        dayjs(a.updated_at).unix() - dayjs(b.updated_at).unix(),
+        dayjs(b.updated_at).unix() - dayjs(a.updated_at).unix(),
 
       render: (updated_at: string) => dayjs(updated_at).format("YYYY-MM-DD"),
     },
@@ -123,8 +131,15 @@ const RoleTable = (props: IProps) => {
               title={"Xác nhận xóa vai trò"}
               description={"Bạn có chắc chắn muốn xóa vai trò này ?"}
               onConfirm={async () => {
-                await deleteRole(entity.id);
-                setReload(!reload);
+                try {
+                  await deleteRole(entity.id);
+                  setReload(!reload);
+                } catch (error) {
+                  notification.error({
+                    message: "Có lỗi xảy ra",
+                    description: "Bạn không có quyền thực hiện thao tác này",
+                  });
+                }
               }}
               okText="Xác nhận"
               cancelText="Hủy"

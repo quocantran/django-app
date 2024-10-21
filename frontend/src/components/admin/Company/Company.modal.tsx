@@ -80,19 +80,27 @@ const CompanyModal = (props: IProps) => {
         logo: logo,
       };
 
-      const res = await updateCompany(company.id, company);
-      const companiesIndex = {
-        index: "companies",
-        document: company,
-      };
+      try {
+        const res = await updateCompany(company.id, company);
 
-      if (res) {
-        message.success(`Cập nhật công ty (${company.name}) thành công`);
-        setOpenModal(false);
-        setDataInit(null);
-        setValue("");
-        setReload(!reload);
-        setLogo("");
+        if (res) {
+          message.success(`Cập nhật công ty (${company.name}) thành công`);
+          setOpenModal(false);
+          setDataInit(null);
+          setValue("");
+          setReload(!reload);
+          setLogo("");
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     } else {
       //create
@@ -104,16 +112,28 @@ const CompanyModal = (props: IProps) => {
       };
       const { id, ...dataCreate } = company;
 
-      const res = await createCompany(dataCreate);
+      try {
+        const res = await createCompany(dataCreate);
 
-      company.id = res?.data.id;
+        company.id = res?.data.id;
 
-      if (res) {
-        message.success(`Thêm mới công ty (${company.name}) thành công`);
-        setOpenModal(false);
-        setValue("");
-        setReload(!reload);
-        setLogo("");
+        if (res.data) {
+          message.success(`Thêm mới công ty (${company.name}) thành công`);
+          setOpenModal(false);
+          setValue("");
+          setReload(!reload);
+          setLogo("");
+        } else {
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: res.message,
+          });
+        }
+      } catch (err) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Bạn không có quyền thực hiện thao tác này",
+        });
       }
     }
   };
