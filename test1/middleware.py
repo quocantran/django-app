@@ -113,6 +113,9 @@ class PermissionMiddleware(MiddlewareMixin):
             return None
         if request.path.startswith('/api/v1/users') and request.path.endswith('/password'):
             return None
+        
+        if request.path.startswith('/api/v1/resumes') and request.method == 'POST':
+            return None
 
         # Kiểm tra nếu đường dẫn là công khai
         if request.path in public_api:

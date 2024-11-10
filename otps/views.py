@@ -15,7 +15,7 @@ import json
 import test1.settings as settings
 
 # Kết nối tới Redis
-redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=16454, db=0, password=settings.REDIS_PASSWORD, decode_responses=True)
+redis_client = redis.StrictRedis(host=settings.REDIS_HOST, port=18199, db=0, password=settings.REDIS_PASSWORD, decode_responses=True)
 
 class OtpCreateView(APIView):
     def post(self, request, *args, **kwargs):

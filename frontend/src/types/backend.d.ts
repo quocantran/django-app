@@ -37,6 +37,13 @@ export interface IChat {
   updatedAt?: string;
 }
 
+export interface IReport {
+  company_count: number;
+  job_count: number;
+  user_count: number;
+  resume_count: number;
+}
+
 export interface IAccount {
   access_token: string;
   user: {

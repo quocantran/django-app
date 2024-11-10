@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'permissions',
     'roles',
     'django_filters',
+    'reports',
     'comments',
 ]
 

@@ -19,6 +19,7 @@ import {
   IComment,
   ICreateComment,
   IChat,
+  IReport,
 } from "@/types/backend";
 import { message, notification } from "antd";
 
@@ -959,4 +960,15 @@ export const getDataPayment = async () => {
     },
   });
   return res;
+};
+
+//api report
+export const fetchReports = async (): Promise<IBackendRes<IReport>> => {
+  const res = await fetch(`${BACKEND_URL}/api/v1/reports/statistics`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return await res.json();
 };
