@@ -8,13 +8,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime, timedelta
 from openpyxl import Workbook
-from openpyxl.chart import BarChart, Reference, Series, LineChart, PieChart
+from openpyxl.chart import BarChart, Reference, Series, LineChart, PieChart, AreaChart
 from openpyxl.utils.dataframe import dataframe_to_rows
 import pandas as pd
 from django.http import HttpResponse
-from django.db.models import Count
+from django.db.models import Count, Max
 from openpyxl.styles import NamedStyle
 from openpyxl.chart.label import DataLabelList
+
 
 
 class ReportView(APIView):
@@ -119,14 +120,14 @@ class ExcelReportView(APIView):
             ws_companies.column_dimensions[column].width = adjusted_width
 
         # Tạo biểu đồ Bar cho số lượng người theo dõi
-        bar_chart = BarChart()
+        bar_chart = PieChart()
         data = Reference(ws_companies, min_col=6, min_row=1, max_col=6, max_row=len(df_companies) + 1)
         categories = Reference(ws_companies, min_col=2, min_row=2, max_row=len(df_companies) + 1)
         bar_chart.add_data(data, titles_from_data=True)
         bar_chart.set_categories(categories)
         bar_chart.title = "Số lượng người theo dõi theo công ty"
         bar_chart.dLbls = DataLabelList()
-        bar_chart.dLbls.showVal = False
+        bar_chart.dLbls.showVal = True
         bar_chart.dLbls.showPercent = False
         bar_chart.dLbls.showCatName = False
         bar_chart.dLbls.showSerName = False
@@ -141,19 +142,19 @@ class ExcelReportView(APIView):
         bar_group_chart.add_data(data_resumes, titles_from_data=True)
         bar_group_chart.set_categories(categories)
         bar_group_chart.title = "Công việc và hồ sơ theo công ty"
-        bar_group_chart.style = 12  # Đặt kiểu biểu đồ
-        bar_group_chart.grouping = "clustered"  # Đặt kiểu nhóm
-        bar_group_chart.overlap = 0  # Đặt độ chồng chéo giữa các thanh
+        bar_group_chart.style = 12 
+        bar_group_chart.grouping = "clustered"
+        bar_group_chart.overlap = 0 
     
         # Đặt màu sắc cho các thanh
         for i, series in enumerate(bar_group_chart.series):
             if i == 0:
-                series.graphicalProperties.solidFill = "4F81BD"  # Màu xanh
+                series.graphicalProperties.solidFill = "4F81BD"
             elif i == 1:
-                series.graphicalProperties.solidFill = "C0504D"  # Màu đỏ
+                series.graphicalProperties.solidFill = "C0504D"
 
         bar_group_chart.dLbls = DataLabelList()
-        bar_group_chart.dLbls.showVal = False
+        bar_group_chart.dLbls.showVal = True
         bar_group_chart.dLbls.showPercent = False
         bar_group_chart.dLbls.showCatName = False
         bar_group_chart.dLbls.showSerName = False
@@ -171,7 +172,7 @@ class ExcelReportView(APIView):
         # Tự động điều chỉnh độ rộng của các cột
         for col in ws_jobs.columns:
             max_length = 0
-            column = col[0].column_letter  # Lấy tên cột
+            column = col[0].column_letter
             for cell in col:
                 try:
                     if len(str(cell.value)) > max_length:
@@ -182,7 +183,6 @@ class ExcelReportView(APIView):
             ws_jobs.column_dimensions[column].width = adjusted_width
 
         # Tạo biểu đồ Bar cho Jobs
-
         bar_chart = BarChart()
         data = Reference(ws_jobs, min_col=3, min_row=1, max_col=3, max_row=len(job_data) + 1)
         categories = Reference(ws_jobs, min_col=2, min_row=2, max_row=len(job_data) + 1)
@@ -195,28 +195,11 @@ class ExcelReportView(APIView):
         bar_chart.dLbls.showCatName = False
         bar_chart.dLbls.showSerName = False
         bar_chart.dLbls.showLegendKey = False
-
         ws_jobs.add_chart(bar_chart, "E5")
+        
 
-        # Tạo biểu đồ Pie cho mức lương của các công việc
-        pie_chart = PieChart()
-        pie_data = Reference(ws_jobs, min_col=3, min_row=2, max_row=len(job_data) + 1)
-        pie_categories = Reference(ws_jobs, min_col=2, min_row=2, max_row=len(job_data) + 1)
-        pie_chart.add_data(pie_data, titles_from_data=True)
-        pie_chart.set_categories(pie_categories)
-        pie_chart.title = "Công việc theo mức lương"
-        pie_chart.dataLabels = DataLabelList()
-        pie_chart.dataLabels.showPercent = True
-        pie_chart.dataLabels.showVal = False
-        pie_chart.dataLabels.showCatName = False
-        pie_chart.dataLabels.showSerName = False
-        pie_chart.dataLabels.showLegendKey = False
-        ws_jobs.add_chart(pie_chart, "E20")
-
-        # Thiết lập header cho response
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=Thống-Kê.xlsx'
 
-        # Ghi Workbook vào response
         wb.save(response)
         return response

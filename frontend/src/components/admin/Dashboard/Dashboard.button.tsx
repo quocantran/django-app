@@ -22,7 +22,7 @@ const DashboardButton = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "statistics.xlsx";
+        a.download = "Thống-Kê.xlsx";
         document.body.appendChild(a);
         a.click();
         a.remove();
