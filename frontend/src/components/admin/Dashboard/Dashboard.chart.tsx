@@ -87,7 +87,7 @@ const DashboardChart = (props: IProps) => {
       >
         <div>
           <h3>Biểu đồ người dùng</h3>
-          <LineChart width={500} height={500} data={dataChart}>
+          <LineChart width={350} height={350} data={dataChart}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name">
               <Label value="Thời gian" offset={0} position="insideBottom" />
@@ -101,15 +101,15 @@ const DashboardChart = (props: IProps) => {
 
         <div>
           <h3>Biểu đồ công ty</h3>
-          <BarChart width={500} height={500} data={dataChart}>
+          <BarChart width={350} height={350} data={dataChart}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name">
-              <Label value="Thời gian" offset={0} position="insideBottom" />
+              <Label value="Thời gian" offset={-5} position="insideBottom" />
             </XAxis>
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar barSize={100} values={"12"} dataKey="companies" fill="#82ca9d">
+            <Bar barSize={70} values={"12"} dataKey="companies" fill="#82ca9d">
               {dataChart.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
@@ -122,14 +122,14 @@ const DashboardChart = (props: IProps) => {
 
         <div>
           <h3>Biểu đồ công việc</h3>
-          <PieChart width={500} height={500}>
+          <PieChart width={350} height={350}>
             <Pie
               data={pieData}
-              cx={200}
-              cy={200}
+              cx={150}
+              cy={150}
               labelLine={false}
               label={({ name, value }) => `${name}: ${value}`}
-              outerRadius={150}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
             >

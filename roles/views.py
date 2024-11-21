@@ -9,16 +9,31 @@ from roles.models import Role
 from permissions.models import Permission
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from test1.pagination import CustomPagination
+from roles.filters import RoleFilter
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+
 
 
 class RoleView(APIView):
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = RoleFilter
+    ordering_fields = ['status', 'created_at', 'updated_at']
+    pagination_class = CustomPagination
 
     def get_permissions(self):
         return [IsAuthenticated()]
 
     def get(self, request, *args, **kwargs):
-        queryset = Role.objects.all().filter(is_active=True)
+        queryset = Role.objects.filter(is_active=True)
+        filter_backend = DjangoFilterBackend()
+        queryset = filter_backend.filter_queryset(request, queryset, self)
         paginator = CustomPagination()
+        if(request.query_params.get('sort') == 'updated_at'):
+            queryset = queryset.order_by('-updated_at')
+        if(request.query_params.get('sort') == 'created_at'):
+            queryset = queryset.order_by('-created_at')
+        
         page = paginator.paginate_queryset(queryset, request)
         if page is not None:
             serializer = GetRoleSerializer(page, many=True)

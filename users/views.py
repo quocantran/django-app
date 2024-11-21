@@ -9,6 +9,7 @@ from test1.pagination import CustomPagination
 from otps.views import verify_otp
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from .filters import UserFilter
+from django.shortcuts import render
 
 class UserView(APIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -57,7 +58,7 @@ class ForgotPasswordView(APIView):
 
         if not isValid:
             return Response('Invalid OTP', status=status.HTTP_400_BAD_REQUEST)
-        return Response('Mật khẩu mới đã được gửi về email của bạn!', status=status.HTTP_200_OK)
+        return render(request, 'forgot-password.html')
 
 class CountUsersView(APIView):
     def get(self, request, *args, **kwargs):
